@@ -2,12 +2,24 @@
 //
 
 #include <iostream>
+#include<thread>
 #include "Server.h"
+#include "Client.h"3
+
+
 using namespace TicTacToc;
 int main()
 {
     Server _server;
-    _server.init();
+    Client _player1;
+    Client _player2;
+    
+    std::thread serverThread(&Server::init, &_server);
+    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+    std::thread player1Thread(&Client::Connect, &_player1);
+    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+    std::thread player2Thread(&Client::Connect, &_player2);
+    std::this_thread::sleep_for(std::chrono::milliseconds(10000));
     return 0;
 }
 
