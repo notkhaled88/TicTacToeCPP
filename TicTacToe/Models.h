@@ -29,5 +29,10 @@ namespace TicTacToc {
 		Succeed,
 		Retry
 	};
-
+	enum TicTacToeElem
+	{
+		X,
+		O,
+		None
+	};
 }
