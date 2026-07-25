@@ -17,7 +17,7 @@
 // #pragma comment (lib, "Mswsock.lib")
 namespace TicTacToc {
 
-	class Server {
+	class __declspec(dllexport) Server {
 	public:
 		enum EnumResult init();
 		enum EnumResult SendCommand(enum Player player, enum Commands command, const char* Data);

@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "Models.h"
+#include <thread>
+#include <chrono>
 
 // Need to link with Ws2_32.lib
 #pragma comment (lib, "Ws2_32.lib")
@@ -17,9 +19,9 @@
 // #pragma comment (lib, "Mswsock.lib")
 
 namespace TicTacToc {
-	class Client {
+	class __declspec(dllexport) Client {
 	public:
-		void Connect();
+		void init();
 	private:
 		SOCKET _serverSocket = INVALID_SOCKET;
 	};

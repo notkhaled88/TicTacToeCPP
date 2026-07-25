@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "..\\TicTacToeClient\\TicTacToeClient.vcxproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "..\\TicTacToeServer\\TicTacToeServer.vcxproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

@@ -35,6 +35,7 @@ enum EnumResult Server::getPlayers()
 
 enum EnumResult Server::startGame()
 {
+    printf("game started!\n");
     if (_gameState == GameState::gameReady || _gameState == GameState::GameIsPlaying)
     {
         _gameState = GameState::GameIsPlaying;
@@ -97,6 +98,7 @@ int Server::getDataLen(const char* data) {
 #pragma region Public
 
 enum EnumResult Server::init() {
+    printf("init started \n");
     addrinfo* serverAdressInfo = resolveServerAddress();
     if (serverAdressInfo == nullptr)
     {
@@ -119,6 +121,9 @@ enum EnumResult Server::init() {
     }
 
     freeaddrinfo(serverAdressInfo);
+
+    printf("waiting for 2 player!\n");
+
     enum EnumResult tempRes;
     while (_player1Socket == INVALID_SOCKET || _player2Socket == INVALID_SOCKET)
     {

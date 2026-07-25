@@ -2,10 +2,9 @@
 
 using namespace TicTacToc;
 
-void Client::Connect() {
-    struct addrinfo* result = NULL,
-        * ptr = NULL,
-        hints;
+void Client::init() {
+    std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+    struct addrinfo* result = NULL, hints;
 
     ZeroMemory(&hints, sizeof(hints));
     hints.ai_family = AF_UNSPEC;
@@ -50,7 +49,5 @@ void Client::Connect() {
         WSACleanup();
         return;
     }
-
-
 
 }
