@@ -4,17 +4,17 @@ namespace TicTacToc {
 	#define Port "27015" //Port Number
 	#define MaxDataLen 10000
 
-	enum Commands
+	enum __declspec(dllexport) Commands
 	{
 		Render,
 		Test
 	};
-	enum Player
+	enum __declspec(dllexport) Player
 	{
 		player1,
 		player2
 	};
-	enum GameState
+	enum __declspec(dllexport) GameState
 	{
 		gameInit,
 		gameReady,
@@ -23,7 +23,7 @@ namespace TicTacToc {
 		gameFinished
 	};
 
-	enum EnumResult
+	enum __declspec(dllexport) EnumResult
 	{
 		Failed,
 		Succeed,

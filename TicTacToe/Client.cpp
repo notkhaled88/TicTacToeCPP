@@ -2,8 +2,15 @@
 
 using namespace TicTacToc;
 
-void Client::init() {
-    std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+EnumResult Client::init() {
+    WSADATA wsaData;
+    int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData); //The WSAStartup function is called to initiate use of WS2_32.dll.
+
+    if (iResult != 0) {
+        printf("WSAStartup failed with error: %d\n", iResult);
+        return EnumResult::Failed;
+    }
+
     struct addrinfo* result = NULL, hints;
 
     ZeroMemory(&hints, sizeof(hints));
@@ -11,11 +18,11 @@ void Client::init() {
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_protocol = IPPROTO_TCP;
 
-    int iResult = getaddrinfo("127.0.0.1", Port, &hints, &result);
+    iResult = getaddrinfo("127.0.0.1", Port, &hints, &result);
     if (iResult != 0) {
         printf("getaddrinfo failed: %d\n", iResult);
         WSACleanup();
-        return;
+        return EnumResult::Failed;
     }
     _serverSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
 
@@ -24,7 +31,7 @@ void Client::init() {
         printf("Error at socket(): %ld\n", WSAGetLastError());
         freeaddrinfo(result);
         WSACleanup();
-        return;
+        return EnumResult::Failed;
     }
     iResult = connect(_serverSocket, result->ai_addr, (int)result->ai_addrlen);
     if (iResult == SOCKET_ERROR) {
@@ -36,12 +43,15 @@ void Client::init() {
     if (_serverSocket == INVALID_SOCKET) {
         printf("Unable to connect to server!\n");
         WSACleanup();
-        return;
+        return EnumResult::Failed;
     }
+    return EnumResult::Succeed;
+
+    /*
+    // Send an initial buffer
     const char* sendbuf = "this is a test";
     char recvbuf[BufferLength];
-
-    // Send an initial buffer
+    
     iResult = send(_serverSocket, sendbuf, (int)strlen(sendbuf), 0);
     if (iResult == SOCKET_ERROR) {
         printf("send failed: %d\n", WSAGetLastError());
@@ -49,5 +59,6 @@ void Client::init() {
         WSACleanup();
         return;
     }
+    */
 
 }

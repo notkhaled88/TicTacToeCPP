@@ -21,7 +21,7 @@
 namespace TicTacToc {
 	class __declspec(dllexport) Client {
 	public:
-		void init();
+		EnumResult init();
 	private:
 		SOCKET _serverSocket = INVALID_SOCKET;
 	};
