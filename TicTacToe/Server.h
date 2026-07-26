@@ -30,6 +30,7 @@ namespace TicTacToe {
 		enum EnumResult getPlayers();
 		addrinfo* resolveServerAddress();
 		int getDataLen(const char* data);
+		Player _currentPlayer = Player::player1;
 
 	};
 }

@@ -8,7 +8,8 @@ namespace TicTacToe {
 	{
 		GetGame,
 		SetValue,
-		CheckWinner
+		CheckWinner,
+		IsItMyTurn
 	};
 	enum __declspec(dllexport) Player
 	{
@@ -28,7 +29,9 @@ namespace TicTacToe {
 	{
 		Failed,
 		Succeed,
-		Retry
+		Retry,
+		NotAllowed,
+		Allowed
 	};
 	enum __declspec(dllexport) TicTacToeElem
 	{

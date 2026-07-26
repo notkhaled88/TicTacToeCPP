@@ -168,15 +168,32 @@ enum EnumResult Server::ReciveRequest(enum Player player)
             break;
         }
     case Requests::SetValue: {
-
+        if (player != _currentPlayer)
+        {
+            _msg = preparemsg("\0");
+            _msg.str[0] = NotAllowed;
+            break;
+        }
+        else
+        {
             TicTacToeElem elem = player == player1 ? TicTacToeElem::X : TicTacToeElem::O;
             int x = (int)buffer[1];
             int y = (int)buffer[2];
             EnumResult res = _game.Set(x, y, elem);
             _msg = preparemsg("\0");
             _msg.str[0] = res;
+            if (res == EnumResult::Succeed)
+            {
+                _currentPlayer = _currentPlayer == player1 ? player2 : player1;
+            }
             break;
         }
+        }
+    case Requests::IsItMyTurn: {
+        _msg = preparemsg("\0");
+        _msg.str[0] = player == _currentPlayer ? EnumResult::Allowed : EnumResult::NotAllowed;
+        break;
+    }
     default: {
 
             _msg = preparemsg("\0");
