@@ -1,0 +1,10 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="../TicTacToeClient/TicTacToeClient.vcxproj" Id="82578b85-eafb-440a-9c8b-9ae9fb7eacd7" />
+  <Project Path="../TicTacToeLibTest/TicTacToeLibTest.vcxproj" Id="b152f8b5-2463-4ee9-a993-7555c409a258" />
+  <Project Path="../TicTacToeServer/TicTacToeServer.vcxproj" Id="c3a75941-b30d-4a5d-8e41-f968b2fda249" />
+  <Project Path="TicTacToe.vcxproj" Id="b76192ba-cdf3-4ce8-88fd-92e77284cc21" />
+</Solution>
