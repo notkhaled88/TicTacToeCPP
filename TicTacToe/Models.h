@@ -1,13 +1,14 @@
 #pragma once
-namespace TicTacToc {
+namespace TicTacToe {
 	#define BufferLength 512 //Buffer Size
 	#define Port "27015" //Port Number
 	#define MaxDataLen 10000
 
-	enum __declspec(dllexport) Commands
+	enum __declspec(dllexport) Requests
 	{
-		Render,
-		Test
+		GetGame,
+		SetValue,
+		CheckWinner
 	};
 	enum __declspec(dllexport) Player
 	{
@@ -29,10 +30,31 @@ namespace TicTacToc {
 		Succeed,
 		Retry
 	};
-	enum TicTacToeElem
+	enum __declspec(dllexport) TicTacToeElem
 	{
 		X,
 		O,
 		None
 	};
+	struct __declspec(dllexport) msg
+	{
+		char* str;
+		int len;
+	};
+	msg preparemsg(const char* rawmsg)
+	{
+		int len = 0;
+		msg _msg;
+		while (rawmsg[len] != '\0')
+		{
+			len++;
+		}
+		_msg.len = len + 2; 
+		_msg.str = new char[_msg.len];
+		for (int i = 1; i < _msg.len; i++)
+		{
+			_msg.str[i] = rawmsg[i - 1];
+		}
+		return _msg;
+	}
 }

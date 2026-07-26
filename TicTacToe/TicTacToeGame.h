@@ -1,7 +1,7 @@
 #pragma once
 #include "Models.h"
 #include <iostream>
-using namespace TicTacToc;
+using namespace TicTacToe;
 namespace TicTacToe {
 #define GameArraySize 3
 	class __declspec(dllexport) TicTacToeGame {

@@ -1,5 +1,5 @@
 #include "Server.h"; 
-using namespace TicTacToc;
+using namespace TicTacToe;
 
 
 #pragma region Private
@@ -39,8 +39,7 @@ enum EnumResult Server::startGame()
     if (_gameState == GameState::gameReady || _gameState == GameState::GameIsPlaying)
     {
         _gameState = GameState::GameIsPlaying;
-        SendCommand(Player::player1, Commands::Test, "Hello World!");
-        ReciveCommand(Player::player1);
+        ReciveRequest(Player::player1);
     }
     return Succeed;
 }
@@ -148,32 +147,48 @@ enum EnumResult Server::init() {
 
 }
 
-enum EnumResult Server::SendCommand(enum Player player, enum Commands command, const char* data)
-{
-
-    SOCKET tempSocket;
-    tempSocket = player == player1 ? _player1Socket : _player2Socket;
-    int len = getDataLen(data);
-    char* msg = new char[len + 1];
-    *(msg) = command;
-    for (int i = 0; i < len; i++)
-    {
-        *(msg + i + 1) = *(data + i);
-    }
-
-    send(tempSocket, msg, len + 1, 0);
-
-    delete[] msg;
-
-    return EnumResult::Succeed;
-}
-enum EnumResult Server::ReciveCommand(enum Player player)
+enum EnumResult Server::ReciveRequest(enum Player player)
 {
     SOCKET tempSocket;
     tempSocket = player == player1 ? _player1Socket : _player2Socket;
     char* buffer = new char[BufferLength];
-    recv(tempSocket, buffer, BufferLength, 0);
-    printf(buffer);
+    int res = recv(tempSocket, buffer, BufferLength, 0);
+    msg _msg;
+    if (res > 0)
+    {
+        delete[] buffer;
+        _msg = preparemsg("\0");
+        _msg.str[0] = (char)EnumResult::Failed;
+        send(tempSocket, _msg.str, _msg.len, 0);
+        return EnumResult::Failed;
+    }
+    switch ((Requests)buffer[0])
+    {
+
+        case Requests::GetGame:
+            _msg = preparemsg(_game.Print());
+            _msg.str[0] = EnumResult::Succeed;
+            break;
+        case Requests::CheckWinner:
+            TicTacToeElem winner = _game.GetWinner();
+            char charWinner = (char)winner;
+            _msg = preparemsg(&charWinner);
+            _msg.str[0] = EnumResult::Succeed;
+            break;
+        case Requests::SetValue:
+            TicTacToeElem elem = player == player1 ? TicTacToeElem::X : TicTacToeElem::O;
+            int x = (int)buffer[1];
+            int y = (int)buffer[2];
+            EnumResult res = _game.Set(x, y, elem);
+            _msg.str[0] = res;
+            _msg = preparemsg("\0");
+        default:
+            _msg = preparemsg("\0");
+            _msg.str[0] = (char)EnumResult::Failed;
+            return EnumResult::Failed;
+    }
+    send(tempSocket, _msg.str, _msg.len, 0);
+    delete[] _msg.str;
     delete[] buffer;
     return EnumResult::Succeed;
 

@@ -1,6 +1,6 @@
 #include "Client.h"
 
-using namespace TicTacToc;
+using namespace TicTacToe;
 
 EnumResult Client::init() {
     WSADATA wsaData;

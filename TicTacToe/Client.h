@@ -18,10 +18,19 @@
 
 // #pragma comment (lib, "Mswsock.lib")
 
-namespace TicTacToc {
+namespace TicTacToe {
 	class __declspec(dllexport) Client {
 	public:
 		EnumResult init();
+		enum EnumResult SendRequest(Requests request, char* data)
+		{
+			msg _msg = preparemsg(data);
+			_msg.str[0] = (char)request;
+			send(_serverSocket, _msg.str, _msg.len, 0);
+			char buffer[BufferLength];
+			recv(_serverSocket, buffer, BufferLength, 0);
+			//todo
+		}
 	private:
 		SOCKET _serverSocket = INVALID_SOCKET;
 	};

@@ -1,5 +1,5 @@
 #include "../TicTacToe/Server.h"
-using namespace TicTacToc;
+using namespace TicTacToe;
 int main()
 {
     Server _server;

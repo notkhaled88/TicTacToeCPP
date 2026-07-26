@@ -1,5 +1,5 @@
 #include "TicTacToeGame.h";
-using namespace TicTacToc;
+using namespace TicTacToe;
 EnumResult TicTacToe::TicTacToeGame::Set(int x, int y, TicTacToeElem value)
 {
 	if (x > GameArraySize - 1 || y > GameArraySize - 1)

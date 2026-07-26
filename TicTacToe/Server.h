@@ -9,23 +9,23 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "Models.h"
-
+#include "TicTacToeGame.h"
 // Need to link with Ws2_32.lib
 #pragma comment (lib, "Ws2_32.lib")
 // #pragma comment (lib, "Mswsock.lib")
 
 // #pragma comment (lib, "Mswsock.lib")
-namespace TicTacToc {
+namespace TicTacToe {
 
 	class __declspec(dllexport) Server {
 	public:
 		enum EnumResult init();
-		enum EnumResult SendCommand(enum Player player, enum Commands command, const char* Data);
-		enum EnumResult ReciveCommand(enum Player player);
+		enum EnumResult ReciveRequest(enum Player player);
 	private:
 		SOCKET _serverSocket  = INVALID_SOCKET;
 		SOCKET _player1Socket = INVALID_SOCKET;
 		SOCKET _player2Socket = INVALID_SOCKET;
+		TicTacToeGame _game;
 		enum GameState _gameState = GameState::gameInit;
 		enum EnumResult getPlayers();
 		enum EnumResult startGame();

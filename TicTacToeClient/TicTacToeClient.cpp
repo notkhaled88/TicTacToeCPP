@@ -1,6 +1,6 @@
 
 #include "../TicTacToe/Client.h"
-using namespace TicTacToc;
+using namespace TicTacToe;
 int main()
 {
     Client _client;
