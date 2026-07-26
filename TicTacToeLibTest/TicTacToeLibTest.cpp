@@ -41,11 +41,21 @@ void testServerClientCommunication() {
     std::thread player2Thread(&Client::init, &_player2);
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     serverThread.join(); //wait until init finshed
+    char* buffer;
     while (true)
     {
         std::thread threadRecieveRequest(&Server::ReciveRequest, &_server, Player::player1);
-        _player1.SendRequest(Requests::GetGame, "\0");
-
+        buffer = _player1.SendRequest(Requests::GetGame, "\0");
+        for (int i = 1; i < BufferLength; i++)
+        {
+            if (buffer[i] == '\0')
+            {
+                printf("\n");
+                break;
+            }
+            printf("%c", buffer[i]);
+        }
+        delete[] buffer;
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         threadRecieveRequest.join();
 

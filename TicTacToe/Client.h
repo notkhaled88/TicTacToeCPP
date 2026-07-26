@@ -22,7 +22,7 @@ namespace TicTacToe {
 	class __declspec(dllexport) Client {
 	public:
 		EnumResult init();
-		enum EnumResult SendRequest(Requests request, const char* data);
+		char* SendRequest(Requests request, const char* data);
 		
 	private:
 		SOCKET _serverSocket = INVALID_SOCKET;
