@@ -1,10 +1,12 @@
 // TicTacToeLibTest.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include <iostream>
-#include "../TicTacToe/TicTacToeGame.h";
+
+#include "../TicTacToe/Server.h"
+#include "../TicTacToe/Client.h"
 using namespace TicTacToe;
-int main()
+
+void testGameClass()
 {
     TicTacToeGame game;
     game.Set(10, 10, TicTacToeElem::X);
@@ -25,6 +27,36 @@ int main()
     }
 
     game.Print();
+}
+void testServerClientCommunication() {
+    
+    Server _server;
+    Client _player1;
+    Client _player2;
+
+    std::thread serverThread(&Server::init, &_server);
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    std::thread player1Thread(&Client::init, &_player1);
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    std::thread player2Thread(&Client::init, &_player2);
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    serverThread.join(); //wait until init finshed
+    while (true)
+    {
+        std::thread threadRecieveRequest(&Server::ReciveRequest, &_server, Player::player1);
+        _player1.SendRequest(Requests::GetGame, "\0");
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        threadRecieveRequest.join();
+
+    }
+    
+}
+
+int main()
+{
+    testServerClientCommunication();
+    return 0;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

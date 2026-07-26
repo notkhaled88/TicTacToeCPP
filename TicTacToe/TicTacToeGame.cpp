@@ -1,5 +1,7 @@
-#include "TicTacToeGame.h";
+#include "TicTacToeGame.h"
+
 using namespace TicTacToe;
+
 EnumResult TicTacToe::TicTacToeGame::Set(int x, int y, TicTacToeElem value)
 {
 	if (x > GameArraySize - 1 || y > GameArraySize - 1)
@@ -19,9 +21,9 @@ EnumResult TicTacToe::TicTacToeGame::Set(int x, int y, TicTacToeElem value)
 
 char* TicTacToe::TicTacToeGame::Print()
 {
-	char str[256];
+	char* str = new char[265];
 
-	snprintf(str, sizeof(str),
+	snprintf(str, 265,
 		" |0|1|2|\n"
 		"--------\n"
 		"0|%c|%c|%c|\n"
@@ -35,7 +37,7 @@ char* TicTacToe::TicTacToeGame::Print()
 		TicTacToeGame::transform(_game[2][0]), TicTacToeGame::transform(_game[2][1]), TicTacToeGame::transform(_game[2][2])
 	);
 
-	printf("%s", str);
+	//printf("%s", str);
 	return str;
 }
 

@@ -62,3 +62,21 @@ EnumResult Client::init() {
     */
 
 }
+
+enum EnumResult Client::SendRequest(Requests request, const char* data){
+    msg _msg = preparemsg(data);
+    _msg.str[0] = (char)request;
+    send(_serverSocket, _msg.str, _msg.len, 0);
+    char buffer[BufferLength];
+    recv(_serverSocket, buffer, BufferLength, 0);
+    for (int i = 1; i < BufferLength; i++)
+    {
+        if (buffer[i] == '\0')
+        {
+            printf("\n");
+            break;
+        }
+        printf("%c", buffer[i]);
+    }
+    return (EnumResult)buffer[0];
+}

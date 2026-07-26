@@ -28,7 +28,6 @@ namespace TicTacToe {
 		TicTacToeGame _game;
 		enum GameState _gameState = GameState::gameInit;
 		enum EnumResult getPlayers();
-		enum EnumResult startGame();
 		addrinfo* resolveServerAddress();
 		int getDataLen(const char* data);
 

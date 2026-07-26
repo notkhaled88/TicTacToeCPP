@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="Models.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="TicTacToeGame.cpp" />
   </ItemGroup>
