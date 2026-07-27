@@ -133,9 +133,19 @@ enum EnumResult Server::init() {
     return EnumResult::Succeed;
 
 }
-
+void Server::startThread(enum Player player)
+{
+    Server::_threadPlayer1Running = player == player1 ? true : Server::_threadPlayer1Running;
+    Server::_threadPlayer2Running = player == player2 ? true : Server::_threadPlayer2Running;
+}
+void Server::endThread(enum Player player)
+{
+    Server::_threadPlayer1Running = player == player1 ? false : Server::_threadPlayer1Running;
+    Server::_threadPlayer2Running = player == player2 ? false : Server::_threadPlayer2Running;
+}
 enum EnumResult Server::ReciveRequest(enum Player player)
 {
+    startThread(player);
     SOCKET tempSocket;
     tempSocket = player == player1 ? _player1Socket : _player2Socket;
     int playerNumber = player == player1 ? 1 : 2;
@@ -149,6 +159,7 @@ enum EnumResult Server::ReciveRequest(enum Player player)
         _msg = preparemsg("\0");
         _msg.str[0] = (char)EnumResult::Failed;
         send(tempSocket, _msg.str, _msg.len, 0);
+        endThread(player);
         return EnumResult::Failed;
     }
     switch ((Requests)buffer[0])
@@ -202,14 +213,21 @@ enum EnumResult Server::ReciveRequest(enum Player player)
         printf("ReciveRequest-default player %d\n", playerNumber);
             _msg = preparemsg("\0");
             _msg.str[0] = (char)EnumResult::Failed;
+            endThread(player);
             return EnumResult::Failed;
         }
     }
     send(tempSocket, _msg.str, _msg.len, 0);
     delete[] _msg.str;
     delete[] buffer;
+    endThread(player);
     return EnumResult::Succeed;
 
 }
 
+bool Server::GetThreadState(enum Player player)
+{
+    bool state = player == Player::player1 ? _threadPlayer1Running : _threadPlayer2Running;
+    return state;
+}
 #pragma endregion

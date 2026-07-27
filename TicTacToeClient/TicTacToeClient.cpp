@@ -12,6 +12,29 @@ int main()
     while (true)
     {
         system("cls");
+        
+        //print game
+        buffer = _client.SendRequest(Requests::GetGame, "\0");
+        if ((EnumResult)buffer[0] == EnumResult::Succeed)
+        {
+            for (int i = 1; i < BufferLength; i++)
+            {
+                if (buffer[i] == '\0')
+                {
+                    printf("\n");
+                    break;
+                }
+                printf("%c", buffer[i]);
+            }
+        }
+        else
+        {
+            printf("request failed!\n");
+            break;
+        }
+        delete[] buffer;
+        
+        // check a winner
         buffer = _client.SendRequest(Requests::CheckWinner, "\0");
         if ((EnumResult)buffer[0] == EnumResult::Succeed)
         {
@@ -28,31 +51,13 @@ int main()
         }
         delete[] buffer;
 
-
-        buffer = _client.SendRequest(Requests::GetGame, "\0");
-        if ((EnumResult)buffer[0] == EnumResult::Succeed)
-        {
-            for (int i = 1; i < BufferLength; i++)
-            {
-                if (buffer[i] == '\0')
-                {
-                    printf("\n");
-                    break;
-                }
-                printf("%c", buffer[i]);
-            }            
-        }
-        else
-        {
-            printf("request failed!\n");
-            break;
-        }
-        delete[] buffer;
+        //check if it is my turn
 
         buffer = _client.SendRequest(Requests::IsItMyTurn, "\0");
         if ((EnumResult)buffer[0] == EnumResult::NotAllowed)
         {
             delete[] buffer;
+            printf("not yet your turn! please wait for other player\n");
             continue;
         }
         delete[] buffer;
