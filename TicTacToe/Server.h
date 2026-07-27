@@ -21,6 +21,7 @@ namespace TicTacToe {
 	public:
 		enum EnumResult init();
 		enum EnumResult ReciveRequest(enum Player player);
+		bool GetThreadState(enum Player player);
 	private:
 		SOCKET _serverSocket  = INVALID_SOCKET;
 		SOCKET _player1Socket = INVALID_SOCKET;
@@ -30,6 +31,11 @@ namespace TicTacToe {
 		enum EnumResult getPlayers();
 		addrinfo* resolveServerAddress();
 		int getDataLen(const char* data);
+		Player _currentPlayer = Player::player1;
+		void startThread(enum Player);
+		void endThread(enum Player);
+		bool _threadPlayer1Running = false;
+		bool _threadPlayer2Running = false;
 
 	};
 }

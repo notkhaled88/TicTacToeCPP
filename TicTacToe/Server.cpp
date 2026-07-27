@@ -133,11 +133,22 @@ enum EnumResult Server::init() {
     return EnumResult::Succeed;
 
 }
-
+void Server::startThread(enum Player player)
+{
+    Server::_threadPlayer1Running = player == player1 ? true : Server::_threadPlayer1Running;
+    Server::_threadPlayer2Running = player == player2 ? true : Server::_threadPlayer2Running;
+}
+void Server::endThread(enum Player player)
+{
+    Server::_threadPlayer1Running = player == player1 ? false : Server::_threadPlayer1Running;
+    Server::_threadPlayer2Running = player == player2 ? false : Server::_threadPlayer2Running;
+}
 enum EnumResult Server::ReciveRequest(enum Player player)
 {
+    startThread(player);
     SOCKET tempSocket;
     tempSocket = player == player1 ? _player1Socket : _player2Socket;
+    int playerNumber = player == player1 ? 1 : 2;
     char* buffer = new char[BufferLength];
     int res = recv(tempSocket, buffer, BufferLength, 0);
     msg _msg;
@@ -148,19 +159,20 @@ enum EnumResult Server::ReciveRequest(enum Player player)
         _msg = preparemsg("\0");
         _msg.str[0] = (char)EnumResult::Failed;
         send(tempSocket, _msg.str, _msg.len, 0);
+        endThread(player);
         return EnumResult::Failed;
     }
     switch ((Requests)buffer[0])
     {
 
     case Requests::GetGame: {
-
+        printf("ReciveRequest-GetGame player %d\n", playerNumber);
             _msg = preparemsg(_game.Print());
             _msg.str[0] = EnumResult::Succeed;
             break;
         }
     case Requests::CheckWinner: {
-
+            printf("ReciveRequest-CheckWinner player %d\n", playerNumber);
             TicTacToeElem winner = _game.GetWinner();
             char charWinner[2] = { (char)winner, '\0'};
             _msg = preparemsg(("", charWinner));
@@ -168,27 +180,54 @@ enum EnumResult Server::ReciveRequest(enum Player player)
             break;
         }
     case Requests::SetValue: {
-
+        printf("ReciveRequest-SetValue player %d\n", playerNumber);
+        if (player != _currentPlayer)
+        {
+            _msg = preparemsg("\0");
+            _msg.str[0] = NotAllowed;
+            break;
+        }
+        else
+        {
             TicTacToeElem elem = player == player1 ? TicTacToeElem::X : TicTacToeElem::O;
             int x = (int)buffer[1];
             int y = (int)buffer[2];
-            EnumResult res = _game.Set(x, y, elem);
+            EnumResult res = _game.Set(x-1, y-1, elem); //return to original value because the client add 1 before sending to the server
             _msg = preparemsg("\0");
             _msg.str[0] = res;
+            if (res == EnumResult::Succeed)
+            {
+                _currentPlayer = _currentPlayer == player1 ? player2 : player1;
+            }
             break;
         }
+        }
+    case Requests::IsItMyTurn: {
+        printf("ReciveRequest-IsItMyTurn player %d\n", playerNumber);
+        _msg = preparemsg("\0");
+        _msg.str[0] = player == _currentPlayer ? EnumResult::Allowed : EnumResult::NotAllowed;
+        break;
+    }
     default: {
 
+        printf("ReciveRequest-default player %d\n", playerNumber);
             _msg = preparemsg("\0");
             _msg.str[0] = (char)EnumResult::Failed;
+            endThread(player);
             return EnumResult::Failed;
         }
     }
     send(tempSocket, _msg.str, _msg.len, 0);
     delete[] _msg.str;
     delete[] buffer;
+    endThread(player);
     return EnumResult::Succeed;
 
 }
 
+bool Server::GetThreadState(enum Player player)
+{
+    bool state = player == Player::player1 ? _threadPlayer1Running : _threadPlayer2Running;
+    return state;
+}
 #pragma endregion

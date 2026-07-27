@@ -4,7 +4,7 @@ using namespace TicTacToe;
 
 EnumResult TicTacToe::TicTacToeGame::Set(int x, int y, TicTacToeElem value)
 {
-	if (x > GameArraySize - 1 || y > GameArraySize - 1)
+	if (x > GameArraySize - 1 || y > GameArraySize - 1 || x < 0 || y < 0)
 	{
 		printf("the indexs (%d , %d) is out of limit\n", x, y);
 		return EnumResult::Retry;
