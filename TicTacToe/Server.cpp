@@ -138,6 +138,7 @@ enum EnumResult Server::ReciveRequest(enum Player player)
 {
     SOCKET tempSocket;
     tempSocket = player == player1 ? _player1Socket : _player2Socket;
+    int playerNumber = player == player1 ? 1 : 2;
     char* buffer = new char[BufferLength];
     int res = recv(tempSocket, buffer, BufferLength, 0);
     msg _msg;
@@ -154,13 +155,13 @@ enum EnumResult Server::ReciveRequest(enum Player player)
     {
 
     case Requests::GetGame: {
-
+        printf("ReciveRequest-GetGame player %d\n", playerNumber);
             _msg = preparemsg(_game.Print());
             _msg.str[0] = EnumResult::Succeed;
             break;
         }
     case Requests::CheckWinner: {
-
+            printf("ReciveRequest-CheckWinner player %d\n", playerNumber);
             TicTacToeElem winner = _game.GetWinner();
             char charWinner[2] = { (char)winner, '\0'};
             _msg = preparemsg(("", charWinner));
@@ -168,6 +169,7 @@ enum EnumResult Server::ReciveRequest(enum Player player)
             break;
         }
     case Requests::SetValue: {
+        printf("ReciveRequest-SetValue player %d\n", playerNumber);
         if (player != _currentPlayer)
         {
             _msg = preparemsg("\0");
@@ -179,7 +181,7 @@ enum EnumResult Server::ReciveRequest(enum Player player)
             TicTacToeElem elem = player == player1 ? TicTacToeElem::X : TicTacToeElem::O;
             int x = (int)buffer[1];
             int y = (int)buffer[2];
-            EnumResult res = _game.Set(x, y, elem);
+            EnumResult res = _game.Set(x-1, y-1, elem); //return to original value because the client add 1 before sending to the server
             _msg = preparemsg("\0");
             _msg.str[0] = res;
             if (res == EnumResult::Succeed)
@@ -190,12 +192,14 @@ enum EnumResult Server::ReciveRequest(enum Player player)
         }
         }
     case Requests::IsItMyTurn: {
+        printf("ReciveRequest-IsItMyTurn player %d\n", playerNumber);
         _msg = preparemsg("\0");
         _msg.str[0] = player == _currentPlayer ? EnumResult::Allowed : EnumResult::NotAllowed;
         break;
     }
     default: {
 
+        printf("ReciveRequest-default player %d\n", playerNumber);
             _msg = preparemsg("\0");
             _msg.str[0] = (char)EnumResult::Failed;
             return EnumResult::Failed;

@@ -11,6 +11,7 @@ int main()
     //main loop of the client
     while (true)
     {
+        system("cls");
         buffer = _client.SendRequest(Requests::CheckWinner, "\0");
         if ((EnumResult)buffer[0] == EnumResult::Succeed)
         {
@@ -57,11 +58,20 @@ int main()
         delete[] buffer;
         int x;
         int y; 
-        printf("enter your next game? in format >xy");
-        scanf("%d%d", &x, &y);
-        todo
-
-
+        printf("enter your next game? in format >xy\n");
+        scanf_s("%d%d", &x, &y);
+        char* data = new char[3];
+        data[0] = x + 1; //add one to avoid string terminator
+        data[1] = y + 1; //add one to avoid string terminator
+        data[2] = '\0';
+        buffer = _client.SendRequest(Requests::SetValue, data);
+        delete[] data;
+        if ((EnumResult)buffer[0] == EnumResult::NotAllowed)
+        {
+            printf("you are not allowed to play this move. please try again!\n");
+        }
+        delete[] buffer;
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
     }
     delete[] buffer;
