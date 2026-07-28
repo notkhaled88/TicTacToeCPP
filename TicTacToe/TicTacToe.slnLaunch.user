@@ -1,0 +1,24 @@
+[
+  {
+    "Name": "ServerClient",
+    "Projects": [
+      {
+        "Path": "..\\TicTacToeClient\\TicTacToeClient.vcxproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "..\\TicTacToeServer\\TicTacToeServer.vcxproj",
+        "Action": "Start"
+      }
+    ]
+  },
+  {
+    "Name": "onlyServer",
+    "Projects": [
+      {
+        "Path": "..\\TicTacToeServer\\TicTacToeServer.vcxproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
