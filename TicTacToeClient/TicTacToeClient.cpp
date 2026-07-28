@@ -76,8 +76,6 @@ int main()
             printf("you are not allowed to play this move. please try again!\n");
         }
         delete[] buffer;
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-
     }
     delete[] buffer;
     return 0;

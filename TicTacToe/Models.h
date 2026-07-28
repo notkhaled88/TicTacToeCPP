@@ -3,7 +3,8 @@ namespace TicTacToe {
 	#define BufferLength 512 //Buffer Size
 	#define Port "27015" //Port Number
 	#define MaxDataLen 10000
-
+	#define RenderTimeInMs 500
+	
 	enum __declspec(dllexport) Requests
 	{
 		GetGame,

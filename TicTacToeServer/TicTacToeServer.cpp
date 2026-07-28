@@ -19,7 +19,7 @@ int main()
             //_server.ReciveRequest(Player::player2);
             std::thread(&Server::ReciveRequest, &_server, Player::player2).detach();
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(RenderTimeInMs));
     }
     return 0;
 }
