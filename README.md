@@ -103,7 +103,9 @@ Once both clients connect, the server will assign player symbols (`X` and `O`) a
 4. **Game End:** Upon detecting a win or tie, the Server sends the final game result to both clients and terminates or resets the session.
 
 ## Example
+### Example 1
 <img width="1199" height="1872" alt="image" src="https://github.com/user-attachments/assets/2b791153-229e-4e77-a16e-478c20e0adfe" />
+### Example 2
 <img width="1199" height="1868" alt="image" src="https://github.com/user-attachments/assets/2968562a-873e-4770-bc8a-a3f9c472f9bf" />
 
 
